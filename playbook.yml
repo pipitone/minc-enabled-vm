@@ -1,10 +1,7 @@
 --- 
 - hosts: all
   sudo: yes
-
   vars: 
-  - mni_packages_url: "http://packages.bic.mni.mcgill.ca/minc-toolkit/Debian"
-  - minc_toolkit_pkg: "minc-toolkit-1.0.01-20131211-Ubuntu_12.04-x86_64.deb"
   - cran_mirror_url: "http://cran.utstat.utoronto.ca"
 
   tasks: 
@@ -13,7 +10,7 @@
 
   - name: Install essential tools
     apt: pkg="{{item}}" state=latest
-    with_items: [ git, vim ]
+    with_items: [ git, vim, build-essential, gfortran ]
 
   - name: Install minc dependencies
     apt: pkg="{{item}}" state=latest
@@ -21,16 +18,8 @@
                  libxcb1, libxdmcp6, libx11-6, libxext6, libxau6, libuuid1,
                  libjpeg62, libexpat1, libtiff4]
 
-  - name: Fetch minc-toolkit package
-    get_url:
-      url="{{mni_packages_url}}/{{minc_toolkit_pkg}}"
-      dest=/var/cache/apt/archives/
-
   - name: Install minc-toolkit 
-    apt: 
-      deb="/var/cache/apt/archives/{{minc_toolkit_pkg}}"
-      state=installed 
-      update_cache=yes
+    apt: deb="/vagrant/minc-toolkit.deb" state=installed update_cache=yes
 
   - name: Source minc-toolkit on bash startup for all users
     lineinfile: regexp="^source .*minc-toolkit-config" line="source /opt/minc/minc-toolkit-config.sh"
@@ -57,4 +46,13 @@
   - name: Install R packages
     shell: echo "install.packages(c('{{item}}'))"| R --slave --no-save --no-restore-history
     with_items:
-        - devtools
+        - ggplot2
+
+  - name: Unzip RMINC package
+    unarchive: src=RMINC-master.zip dest=/tmp/
+
+  - name: Install RMINC
+    shell: LD_LIBRARY_PATH=/opt/minc/lib R CMD INSTALL /tmp/RMINC-master --configure-args='--with-build-path=/opt/minc' --configure-vars='LIBS=-ldl'
+
+  - name: clean up cached packages
+    shell: apt-get clean -y
