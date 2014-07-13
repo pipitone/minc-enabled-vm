@@ -9,7 +9,7 @@ This repo contains build files to create a Ubuntu 12.04 virtual machine with the
 Download the Virtual Machine 
 ----------------------------
 If you just want the built virtual machine, you can find it here: 
-https://drive.google.com/file/d/0B_tFqyKqazqJdzBJTUIxWVhjRjA/edit?usp=sharing
+https://drive.google.com/file/d/0B_tFqyKqazqJSEtoVUNrRU1UZlE/edit?usp=sharing
 
 Unzip and import `box.ovf` into virtualbox as an appliance. 
 
