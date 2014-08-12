@@ -16,9 +16,19 @@ Unzip and import `box.ovf` into virtualbox as an appliance.
 The default username/password is `vagrant`/`vagrant`. To save space there is no desktop installed, but if you want that, simply log in, and run the command: 
 
     sudo apt-get install -y ubuntu-desktop
+    
+## BrainView2
+There currently is no easily installable package for [brain-view2](https://github.com/sghanavati/brain-view2), but I've thrown together a quick-and-dirty way of installing it. From a terminal in your VM, run: 
 
-Building the Virtual Machine
-----------------------------
+
+    sudo apt-get install libqt4-opengl libhdf5-serial-1.8.4
+    wget http://imaging-genetics.camh.ca/data/brain-view2.tar.gz
+    sudo tar -C / -xzf brain-view2.tar.gz
+    sudo ln -s /opt/minc/lib/libvolume_io2.so.1.1.2 /opt/minc/lib/libvolume_io2.so.1
+
+
+Building the Virtual Machine from Scratch
+-----------------------------------------
 You'll need [Vagrant](http://vagrantup.com), [Ansible](http://ansible.com), and
 [virtualbox](http://virtualbox.org). Then, run: 
   
